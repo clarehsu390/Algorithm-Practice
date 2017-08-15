@@ -21,12 +21,7 @@ class DynamicArray
   # O(1)
   def []=(index, value)
     
- if index >= @length
-      (index - @length).times { push(nil) }
-    elsif index < 0
-      raise "index out of bounds" if index < -(@length)
-      return self[@length + index] = value
-    end
+    check_index(index)
     if index == @length
       resize! if capacity == @length
       @length += 1
