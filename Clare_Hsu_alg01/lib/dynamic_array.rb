@@ -8,6 +8,7 @@ class DynamicArray
     @store = StaticArray.new(capacity)
     @length = 0
     @start_idx = 0
+    @capacity = capacity
   
   end
 
@@ -41,9 +42,9 @@ class DynamicArray
     last_item
   end
 
-  def capacity
-    @store.length
-  end
+  # def capacity
+  #   @store.length
+  # end
 
   # O(1) ammortized; O(n) worst case. Variable because of the possible
   # resize.
@@ -71,11 +72,11 @@ class DynamicArray
     @start_idx = (@start_idx - 1) % capacity
     @store[@start_idx] = val
     @length += 1
-    p self
+    self
   end
 
   protected
-  attr_accessor :store
+  attr_accessor :store, :capacity
   attr_writer :length
 
   def check_index(index)
@@ -91,8 +92,9 @@ class DynamicArray
 
   # O(n): has to copy over all the elements to the new store.
   def resize!
- 
-    new_store = StaticArray.new(capacity * 2)
+    @capacity = capacity * 2
+    new_store = StaticArray.new(@capacity)
+    
     i = 0
     while i < @length
       new_store[i] = self[i]
