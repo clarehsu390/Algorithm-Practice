@@ -1,5 +1,6 @@
 # This class just dumbs down a regular Array to be statically sized.
 class StaticArray
+  include Enumerable
   def initialize(length)
     @store = Array.new(length)
   end

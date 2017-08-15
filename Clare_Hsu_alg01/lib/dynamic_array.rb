@@ -2,38 +2,32 @@ require_relative "static_array"
 
 class DynamicArray
   attr_reader :length
+  
 
-  def initialize
-    @store = StaticArray.new(capacity=0)
+  def initialize(capacity = 8)
+    @store = StaticArray.new(capacity)
     @length = 0
     @start_idx = 0
-
+  
   end
 
   # O(1)
   def [](index)
-    if index > @length
-      return nil
-    elsif index < 0
-      return nil if index < -(@length)
-      return self[@length + index]
-    end
+    check_index(index)
     @store[(@start_idx + index) % capacity]
-
-
   end
 
   # O(1)
   def []=(index, value)
-    if index >= @length
-      (index - @length).times { push(nil )}
-    elsif index < 0 
-      return nil if index < -(@length)
-      return self[@length+index] = value
+    
+ if index >= @length
+      (index - @length).times { push(nil) }
+    elsif index < 0
+      raise "index out of bounds" if index < -(@length)
+      return self[@length + index] = value
     end
-
     if index == @length
-      resize! if capacity == @count
+      resize! if capacity == @length
       @length += 1
     end
     @store[(@start_idx + index) % capacity] = value
@@ -41,8 +35,8 @@ class DynamicArray
 
   # O(1)
   def pop
-    return nil if @length == 0
-    last_item = @store[(@start_idx + @length - 1) % capacity]
+    raise "index out of bounds" if @length == 0
+    last_item = @store[(@start_idx + @length- 1) % capacity]
     @length -= 1
     last_item
   end
@@ -54,6 +48,7 @@ class DynamicArray
   # O(1) ammortized; O(n) worst case. Variable because of the possible
   # resize.
   def push(val)
+  
     resize! if capacity == @length
     @store[(@start_idx + @length) % capacity] = val
     @length += 1
@@ -62,7 +57,7 @@ class DynamicArray
 
   # O(n): has to shift over all the elements.
   def shift
-    return nil if @length == 0
+    raise "index out of bounds" if @length == 0
     @length -= 1
     first_item = @store[@start_idx]
     @start_idx = (@start_idx + 1) % capacity
@@ -71,16 +66,39 @@ class DynamicArray
 
   # O(n): has to shift over all the elements.
   def unshift(val)
+    resize! if capacity == @length
+    @store[(@start_idx - 1) % capacity] = val
+    @length += 1
+    self
   end
 
   protected
-  attr_accessor :capacity, :store
+  attr_accessor :store
   attr_writer :length
 
   def check_index(index)
+  
+    if index >= @length
+      raise "index out of bounds"
+    elsif index < 0
+      raise "index out of bounds" if index < -(@length)
+      return self[@length + index]
+    end
+    
   end
 
   # O(n): has to copy over all the elements to the new store.
   def resize!
+    p capacity
+    new_store = StaticArray.new(capacity * 2)
+    i = 0
+    while i < @length
+      new_store[i] = self[i]
+      i += 1
+    end
+    @store = new_store
+    @start_idx = 0
   end
 end
+
+
