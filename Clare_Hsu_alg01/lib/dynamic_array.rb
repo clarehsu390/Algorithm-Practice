@@ -66,10 +66,12 @@ class DynamicArray
 
   # O(n): has to shift over all the elements.
   def unshift(val)
+    
     resize! if capacity == @length
-    @store[(@start_idx - 1) % capacity] = val
+    @start_idx = (@start_idx - 1) % capacity
+    @store[@start_idx] = val
     @length += 1
-    self
+    p self
   end
 
   protected
@@ -89,7 +91,7 @@ class DynamicArray
 
   # O(n): has to copy over all the elements to the new store.
   def resize!
-    p capacity
+ 
     new_store = StaticArray.new(capacity * 2)
     i = 0
     while i < @length
