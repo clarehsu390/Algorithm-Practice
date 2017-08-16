@@ -77,13 +77,13 @@ class DynamicArray
     resize! if capacity == @length
     @length += 1
     i = 0
-    while i <= @length - 2
-      self[i+1] = self[i]
-      i += 1
-    end
-    # (@length - 2).downto(0).each do |i|
-    #   self[i+1] = self[i]
+    # while i <= @length - 2
+    #   self[i] = self[i+1]
+    #   i += 1
     # end
+    (@length - 2).downto(0).each do |i|
+      self[i+1] = self[i]
+    end
     self[0] = val
     self
  
