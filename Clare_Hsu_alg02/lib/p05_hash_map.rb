@@ -28,7 +28,10 @@ class HashMap
   end
 
   def delete(key)
-    count -= 1 if @store[key.hash % num_buckets].remove(key)
+    if get(key)
+      @store[key.hash % num_buckets].remove(key)
+      @count -= 1
+    end
   end
 
   def each
@@ -56,6 +59,11 @@ class HashMap
 
   def resize!
     old_store = @store
+    @store = Array.new(num_buckets * 2) { LinkedList.new }
+    old_store.each do |bucket|
+      bucket.each {|list| set(list.key, list.val)}
+    end
+    @count = 0
 
   end
 
