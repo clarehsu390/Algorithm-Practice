@@ -7,8 +7,26 @@
 
 # Import any files you need to
 
-
-
+require_relative 'graph'
+require_relative 'topological_sort'
 def install_order(arr)
+    ids = []
+    sorted = []
+    max = 0
+    arr.each do |el|
+        max = el[0] if max < el[0]
+    end
+    vertices = []
+    (1..max).to_a.each do |value|
+        vertices << Vertex.new(value)
+    end
 
+    arr.each do |package|
+        Edge.new(vertices[package[1] - 1], vertices[package[0] - 1])
+    end
+
+    topological_sort(vertices).each {|el| sorted << el.value}
+    sorted
+    
 end
+
