@@ -19,14 +19,18 @@ class DynamicProgramming
   def frog_cache_builder(n)
     #[[1,1,1], [1,2], [2,1], [3]]
     cache = {1 => [[1]], 2 => [[1,1], [2]], 3 => [[1,1,1], [1,2], [2,1], [3]]}
-    numbers = [1..n]
     return cache if n <= 3
     (4..n).each do |i|
-      cache[i] = cache[i-1] + cache[i-2] + cache[i-3]
-    
-   
-      # p cache[i]
+      arr = []
+      (1..3).each do |num|
+        cache[i - num].each do |el|
+          
+          arr << el + [num]
+        end
+      end
+        cache[i] = arr
     end
+
     cache
 
   end
@@ -42,6 +46,15 @@ class DynamicProgramming
   end
 
   def super_frog_hops(n, k)
+
+    # arr = [[]]
+    # if k == 1
+    #   n.times do
+    #     arr[0] << 1
+    #   end
+    # end
+    # return arr
+
 
   end
 
