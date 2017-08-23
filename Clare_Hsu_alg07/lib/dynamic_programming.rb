@@ -12,19 +12,28 @@ class DynamicProgramming
   end
 
   def frog_hops_bottom_up(n)
-    #fibonnaci
-    return [[1]] if n == 1
-    return [[1,1], [2]] if n == 2
-    sequence = [[1,1], [2]]
+   frog_cache_builder(n)[n]
 
   end
 
   def frog_cache_builder(n)
-    cache = {1 => frog_hops_bottom_up(1), 2 => frog_hops_bottom_up(2)}
-    return cache[n]
+    #[[1,1,1], [1,2], [2,1], [3]]
+    cache = {1 => [[1]], 2 => [[1,1], [2]], 3 => [[1,1,1], [1,2], [2,1], [3]]}
+    numbers = [1..n]
+    return cache if n <= 3
+    (4..n).each do |i|
+      cache[i] = cache[i-1] + cache[i-2] + cache[i-3]
+    
+   
+      # p cache[i]
+    end
+    cache
+
   end
 
   def frog_hops_top_down(n)
+    return [[1]] if n == 1
+    return [[1,1], [2]] if n == 2
 
   end
 
@@ -37,6 +46,11 @@ class DynamicProgramming
   end
 
   def knapsack(weights, values, capacity)
+    return 0 if weights.empty? || values.empty? || capacity == 0
+    if values.last > capacity
+      return values.max
+    end
+
 
   end
 
