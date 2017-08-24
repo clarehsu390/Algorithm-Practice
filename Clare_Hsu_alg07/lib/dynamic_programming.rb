@@ -66,24 +66,47 @@ class DynamicProgramming
    cache = {1 => [[1]], 2 => [[1,1], [2]], 3 => [[1,1,1], [1,2], [2,1], [3]]}
     return cache[n].select {|el| el[0] <= k} if n > k && cache[n]
     return cache[n] if cache[n]
-    
-
+    # (1..k).each do |num|
+    #   arr = []
+    #   cache[n - 1].each do |el|
+    #     arr << el + [num]
+    #   end
+    #   cache[num] = arr
+    # end
+    # cache[n]
 
 
   end
 
   def knapsack(weights, values, capacity)
     return 0 if weights.empty? || values.empty? || capacity == 0
-    if values.max > capacity
-      return values.max
-    end
-
+    return values.max if weights.any? {|el| el == capacity}
+    solution_table = knapsack_table(weights, values, capacity)
+    solution_table[capacity][-1]
 
   end
 
   # Helper method for bottom-up implementation
   def knapsack_table(weights, values, capacity)
+    solution_table = []
+    (0..capacity).each do |i|
+      solution_table[i] = []
+      (0..weights.length - 1).each do |j|
+        if i == 0
+          solution_table[i][j] = 0
+        elsif j == 0
+          solution_table[i][j] = weights[0] > i ? 0 : values[0]
+        else
 
+          option1 = solution_table[i][j-1]
+          option2 = i < weights[j] ? 0 : solution_table[i-weights[j]][j-1]
+          optimum = [option1, option2].max
+          solution_table[i][j] = optimum
+          end
+      end
+    end
+
+      solution_table
   end
 
   def maze_solver(maze, start_pos, end_pos)

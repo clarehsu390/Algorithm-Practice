@@ -14,7 +14,7 @@ describe 'Frog Hops Bottom Up' do
   it 'handles recursive cases' do
     expect(dp.frog_hops_bottom_up(4).sort).to eq([[1, 1, 1, 1], [1, 1, 2], [1, 2, 1], [2, 1, 1], [2, 2], [1, 3], [3, 1]].sort)
     expect(dp.frog_hops_bottom_up(10).length).to eq(274)
-    # expect(dp.frog_hops_bottom_up(10)).to include([1, 3, 3, 3])
+    expect(dp.frog_hops_bottom_up(10)).to include([1, 3, 3, 3])
   end
 
   # it 'runs in non-exponential time' do
