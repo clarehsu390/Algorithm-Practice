@@ -30,3 +30,14 @@ def install_order(arr)
     
 end
 
+def install_order2(arr)
+    independent = arr.select {|el| el[1].nil?}
+    dependents = arr.select {|el| !el[1].nil?}
+    vertices = []
+    dependents.each do |package|
+        vertices << Vertex.new(package[0])
+        Edge.new(vertices[package[1] - 1], vertices[package[0] - 1])
+    end
+    independent + topological_sort(vertices).map {|el| el.value}
+end
+
