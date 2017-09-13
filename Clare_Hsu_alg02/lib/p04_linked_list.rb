@@ -84,13 +84,10 @@ class LinkedList
   def remove(key)
     self.each do |node|
       if node.key == key
-        node.next.prev = node.prev if node.prev
-        node.prev.next = node.next if node.next
-        node.next = nil
-        node.prev = nil
-        return
+        node.prev.next = node.next
+        node.next.prev = node.prev
       end
-      end
+    end
   end
 
   def each
