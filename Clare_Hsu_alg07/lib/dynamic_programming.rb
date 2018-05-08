@@ -6,9 +6,10 @@ class DynamicProgramming
 
   def blair_nums(n)
     return @blair_cache[n] if @blair_cache[n]
-    number = blair_nums(n-1) + blair_nums(n-2) + (2 * n - 3)
+    number = blair_nums(n-1) + blair_nums(n-2) + 2 * (n - 1) - 1
     @blair_cache[n] = number
     number
+
   end
 
   def frog_hops_bottom_up(n)
@@ -18,13 +19,12 @@ class DynamicProgramming
 
   def frog_cache_builder(n)
     #[[1,1,1], [1,2], [2,1], [3]]
-    cache = {1 => [[1]], 2 => [[1,1], [2]], 3 => [[1,1,1], [1,2], [2,1], [3]]}
+    cache = {0 => [[]], 1 => [[1]], 2 => [[1,1], [2]]}
     return cache if n <= 3
-    (4..n).each do |i|
+    (3..n).each do |i|
       arr = []
       (1..3).each do |num|
         cache[i - num].each do |el|
-          
           arr << el + [num]
         end
       end
@@ -36,29 +36,26 @@ class DynamicProgramming
   end
 
   def frog_hops_top_down(n)
-    return [[1]] if n == 1
-    return [[1,1], [2]] if n == 2
+    @frog_cache = {0 => [[]], 1 => [[1]], 2 => [[1,1], [2]]}
     frog_hops_top_down_helper(n)
     
 
   end
 
   def frog_hops_top_down_helper(n)
-    @cache = {1 => [[1]], 2 => [[1,1], [2]], 3 => [[1,1,1], [1,2], [2,1], [3]]}
-    return @cache[n] if @cache[n]
-    (4..n).each do |i|
-      arr = []
-      (1..3).each do |num|
-        @cache[i - num].each do |el|
-          
-          arr << el + [num]
+    return @frog_cache[n] if @frog_cache[n]
+    new_set = []
+    (1..3).each do |first_step|
+      frog_hops_top_down_helper(n - first_step).each do |way|
+          new_way = [first_step]
+          way.each do |step|
+            new_way << step
+          end
+          new_set << new_way
         end
       end
-        @cache[i] = arr
-    end
-
-    @cache[n]
-
+      @frog_cache[n] = new_set
+        
   end
 
   def super_frog_hops(n, k)
